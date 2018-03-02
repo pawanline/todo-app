@@ -56472,6 +56472,9 @@ var HomePage = (function () {
         this.reorderIsEnabled = false;
         this.todos = this.todoProvider.getTodos();
     }
+    HomePage.prototype.archiveTodo = function (todoIndex) {
+        this.todoProvider.archiveTodo(todoIndex);
+    };
     HomePage.prototype.goToArchivePage = function () {
         this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_3__pages_todo_archive_todo_archive__["a" /* TodoArchivePage */]);
     };
@@ -56512,7 +56515,7 @@ var HomePage = (function () {
 }());
 HomePage = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_6" /* Component */])({
-        selector: 'page-home',template:/*ion-inline-start:"/Users/pawan/Documents/GitHub/todo-app/src/pages/home/home.html"*/'<ion-header>\n    <ion-navbar>\n      <ion-title>\n        Todo\n      </ion-title>\n      <ion-buttons end> \n        <button (click)="toggleReorder()" ion-button *ngIf="!reorderIsEnabled">\n          Edit\n        </button>\n        <button (click)="toggleReorder()" ion-button *ngIf="reorderIsEnabled">\n          Done\n        </button>\n  \n        <button ion-button (click)="openTodoAlert()">\n          <ion-icon name="add"></ion-icon>\n        </button>\n      </ion-buttons>\n    </ion-navbar>\n  </ion-header>\n  \n  <ion-content padding>\n    \n    <ion-list [reorder]="reorderIsEnabled" (ionItemReorder)="itemReordered($event)">\n      <ion-item-sliding *ngFor="let todo of todos">\n         <ion-item>{{todo}}</ion-item>\n  \n         <ion-item-options side="right">\n           <button color="danger" ion-button>\n             <ion-icon name="trash"></ion-icon>\n           </button>\n         </ion-item-options>\n      </ion-item-sliding>\n     \n    </ion-list>\n  \n    <ion-fab right bottom>\n      <button ion-fab (click)="goToArchivePage()">\n        <ion-icon name="archive"></ion-icon>\n      </button>\n    </ion-fab>\n  \n  </ion-content>\n  '/*ion-inline-end:"/Users/pawan/Documents/GitHub/todo-app/src/pages/home/home.html"*/
+        selector: 'page-home',template:/*ion-inline-start:"/Users/pawan/Documents/GitHub/todo-app/src/pages/home/home.html"*/'<ion-header>\n    <ion-navbar>\n      <ion-title>\n        Todo\n      </ion-title>\n      <ion-buttons end> \n        <button (click)="toggleReorder()" ion-button *ngIf="!reorderIsEnabled">\n          Edit\n        </button>\n        <button (click)="toggleReorder()" ion-button *ngIf="reorderIsEnabled">\n          Done\n        </button>\n  \n        <button ion-button (click)="openTodoAlert()">\n          <ion-icon name="add"></ion-icon>\n        </button>\n      </ion-buttons>\n    </ion-navbar>\n  </ion-header>\n  \n  <ion-content padding>\n    \n    <ion-list [reorder]="reorderIsEnabled" (ionItemReorder)="itemReordered($event)">\n      <ion-item-sliding *ngFor="let todo of todos; let todoIndex = index">\n         <ion-item>{{todo}}</ion-item>\n  \n         <ion-item-options side="right">\n           <button color="danger" ion-button (click)="archiveTodo(todoIndex)">\n             <ion-icon name="trash"></ion-icon>\n           </button>\n         </ion-item-options>\n      </ion-item-sliding>\n     \n    </ion-list>\n  \n    <ion-fab right bottom>\n      <button ion-fab (click)="goToArchivePage()">\n        <ion-icon name="archive"></ion-icon>\n      </button>\n    </ion-fab>\n  \n  </ion-content>\n  '/*ion-inline-end:"/Users/pawan/Documents/GitHub/todo-app/src/pages/home/home.html"*/
     }),
     __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__providers_todo_todo_provider__["a" /* TodoProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__providers_todo_todo_provider__["a" /* TodoProvider */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* AlertController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* AlertController */]) === "function" && _c || Object])
 ], HomePage);
@@ -56552,10 +56555,19 @@ var TodoProvider = (function () {
     function TodoProvider(http) {
         this.http = http;
         this.todos = [];
+        this.archivedTodos = [];
         console.log('Hello TodoService Provider');
     }
+    TodoProvider.prototype.archiveTodo = function (todoIndex) {
+        var todoToBeArchived = this.todos[todoIndex];
+        this.todos.splice(todoIndex, 1);
+        this.archivedTodos.push(todoToBeArchived);
+    };
     TodoProvider.prototype.getTodos = function () {
         return this.todos;
+    };
+    TodoProvider.prototype.getArchivedTodos = function () {
+        return this.archivedTodos;
     };
     TodoProvider.prototype.addTodo = function (todo) {
         this.todos.push(todo);
@@ -74804,11 +74816,7 @@ AppModule = __decorate([
         imports: [
             __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
             __WEBPACK_IMPORTED_MODULE_5__angular_http__["a" /* HttpModule */],
-            __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["a" /* IonicModule */].forRoot(__WEBPACK_IMPORTED_MODULE_6__app_component__["a" /* MyApp */], {}, {
-                links: [
-                    { loadChildren: '../pages/todo-archive/todo-archive.module#TodoArchivePageModule', name: 'TodoArchivePage', segment: 'todo-archive', priority: 'low', defaultHistory: [] }
-                ]
-            })
+            __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["a" /* IonicModule */].forRoot(__WEBPACK_IMPORTED_MODULE_6__app_component__["a" /* MyApp */])
         ],
         bootstrap: [__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["b" /* IonicApp */]],
         entryComponents: [
@@ -114673,6 +114681,7 @@ exports.toSubscriber = toSubscriber;
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TodoArchivePage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(91);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_todo_todo_provider__ = __webpack_require__(100);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -114684,6 +114693,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
+
 /**
  * Generated class for the TodoArchivePage page.
  *
@@ -114691,24 +114701,26 @@ var __metadata = (this && this.__metadata) || function (k, v) {
  * on Ionic pages and navigation.
  */
 var TodoArchivePage = (function () {
-    function TodoArchivePage(navCtrl, navParams) {
+    function TodoArchivePage(navCtrl, navParams, todoProvider) {
         this.navCtrl = navCtrl;
         this.navParams = navParams;
+        this.todoProvider = todoProvider;
+        this.archiveTodos = [];
     }
     TodoArchivePage.prototype.ionViewDidLoad = function () {
-        console.log('ionViewDidLoad TodoArchivePage');
+        this.archiveTodos = this.todoProvider.getArchivedTodos();
     };
     return TodoArchivePage;
 }());
 TodoArchivePage = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* IonicPage */])(),
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_6" /* Component */])({
-        selector: 'page-todo-archive',template:/*ion-inline-start:"/Users/pawan/Documents/GitHub/todo-app/src/pages/todo-archive/todo-archive.html"*/'<!--\n  Generated template for the TodoArchivePage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-title>todo-archive</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding>\n    <ion-fab right bottom>\n        <button ion-fab (click)="goToArchivePage()">\n          <ion-icon name="archive"></ion-icon>\n        </button>\n      </ion-fab>\n</ion-content>\n'/*ion-inline-end:"/Users/pawan/Documents/GitHub/todo-app/src/pages/todo-archive/todo-archive.html"*/,
+        selector: 'page-todo-archive',template:/*ion-inline-start:"/Users/pawan/Documents/GitHub/todo-app/src/pages/todo-archive/todo-archive.html"*/'<!--\n  Generated template for the TodoArchivePage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-title>todo-archive</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding>\n    <ion-list>\n    <ion-item *ngFor="let todo of archiveTodos">{{todo}}</ion-item>\n    </ion-list>\n\n\n</ion-content>\n'/*ion-inline-end:"/Users/pawan/Documents/GitHub/todo-app/src/pages/todo-archive/todo-archive.html"*/,
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavParams */]) === "function" && _b || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavParams */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__providers_todo_todo_provider__["a" /* TodoProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__providers_todo_todo_provider__["a" /* TodoProvider */]) === "function" && _c || Object])
 ], TodoArchivePage);
 
-var _a, _b;
+var _a, _b, _c;
 //# sourceMappingURL=todo-archive.js.map
 
 /***/ })
