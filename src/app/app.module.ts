@@ -7,11 +7,13 @@ import { HttpModule } from "@angular/http";
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { TodoProvider } from '../providers/todo/todo-provider';
+import { TodoArchivePage } from '../pages/todo-archive/todo-archive';
 
 @NgModule({
   declarations: [
     MyApp,
-    HomePage
+    HomePage,
+    TodoArchivePage
   ],
   imports: [
     BrowserModule,
@@ -21,7 +23,8 @@ import { TodoProvider } from '../providers/todo/todo-provider';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage
+    HomePage,
+    TodoArchivePage
   ],
   providers: [
     StatusBar,
