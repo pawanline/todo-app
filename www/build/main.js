@@ -55687,7 +55687,7 @@ function SlideEdgeGesture_tsickle_Closure_declarations() {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_alert_alert__ = __webpack_require__(52);
 /* unused harmony reexport Alert */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_alert_alert_controller__ = __webpack_require__(106);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return __WEBPACK_IMPORTED_MODULE_6__components_alert_alert_controller__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return __WEBPACK_IMPORTED_MODULE_6__components_alert_alert_controller__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_alert_alert_component__ = __webpack_require__(51);
 /* unused harmony reexport AlertCmp */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_app_app__ = __webpack_require__(6);
@@ -55862,7 +55862,7 @@ function SlideEdgeGesture_tsickle_Closure_declarations() {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_92__components_toast_toast_component__ = __webpack_require__(86);
 /* unused harmony reexport ToastCmp */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_93__components_toast_toast_controller__ = __webpack_require__(159);
-/* unused harmony reexport ToastController */
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return __WEBPACK_IMPORTED_MODULE_93__components_toast_toast_controller__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_94__components_toggle_toggle__ = __webpack_require__(161);
 /* unused harmony reexport Toggle */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_95__components_toolbar_toolbar_footer__ = __webpack_require__(163);
@@ -55896,7 +55896,7 @@ function SlideEdgeGesture_tsickle_Closure_declarations() {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_108__platform_dom_controller__ = __webpack_require__(8);
 /* unused harmony reexport DomController */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_109__platform_platform__ = __webpack_require__(3);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return __WEBPACK_IMPORTED_MODULE_109__platform_platform__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return __WEBPACK_IMPORTED_MODULE_109__platform_platform__["a"]; });
 /* unused harmony reexport setupPlatform */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_110__tap_click_haptic__ = __webpack_require__(35);
 /* unused harmony reexport Haptic */
@@ -56464,7 +56464,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var HomePage = (function () {
-    function HomePage(todoProvider, navCtrl, alertController) {
+    function HomePage(toastController, todoProvider, navCtrl, alertController) {
+        this.toastController = toastController;
         this.todoProvider = todoProvider;
         this.navCtrl = navCtrl;
         this.alertController = alertController;
@@ -56505,22 +56506,64 @@ var HomePage = (function () {
                         var todoText;
                         todoText = inputData.addTodoInput;
                         _this.todoProvider.addTodo(todoText);
+                        addTodoAlert.onDidDismiss(function () {
+                            var addToast = _this.toastController.create({
+                                message: "toast added",
+                                duration: 2000,
+                            });
+                            addToast.present();
+                        });
                     }
                 }
             ]
         });
         addTodoAlert.present();
     };
+    HomePage.prototype.editTodo = function (todoIndex) {
+        var _this = this;
+        var editTodoAlert = this.alertController.create({
+            title: "Edit A Todo",
+            message: "Edit Your Todo",
+            inputs: [
+                {
+                    type: "text",
+                    name: "editTodoInput",
+                    value: this.todos[todoIndex]
+                }
+            ],
+            buttons: [
+                {
+                    text: "Cancel"
+                },
+                {
+                    text: "Edit Todo",
+                    handler: function (inputData) {
+                        var todoText;
+                        todoText = inputData.editTodoInput;
+                        _this.todoProvider.editTodo(todoText, todoIndex);
+                        editTodoAlert.onDidDismiss(function () {
+                            var editTodoToast = _this.toastController.create({
+                                message: "Todo Edited",
+                                duration: 2000
+                            });
+                            editTodoToast.present();
+                        });
+                    }
+                }
+            ]
+        });
+        editTodoAlert.present();
+    };
     return HomePage;
 }());
 HomePage = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_6" /* Component */])({
-        selector: 'page-home',template:/*ion-inline-start:"/Users/pawan/Documents/GitHub/todo-app/src/pages/home/home.html"*/'<ion-header>\n    <ion-navbar>\n      <ion-title>\n        Todo\n      </ion-title>\n      <ion-buttons end> \n        <button (click)="toggleReorder()" ion-button *ngIf="!reorderIsEnabled">\n          Edit\n        </button>\n        <button (click)="toggleReorder()" ion-button *ngIf="reorderIsEnabled">\n          Done\n        </button>\n  \n        <button ion-button (click)="openTodoAlert()">\n          <ion-icon name="add"></ion-icon>\n        </button>\n      </ion-buttons>\n    </ion-navbar>\n  </ion-header>\n  \n  <ion-content padding>\n    \n    <ion-list [reorder]="reorderIsEnabled" (ionItemReorder)="itemReordered($event)">\n      <ion-item-sliding *ngFor="let todo of todos; let todoIndex = index">\n         <ion-item>{{todo}}</ion-item>\n  \n         <ion-item-options side="right">\n           <button color="danger" ion-button (click)="archiveTodo(todoIndex)">\n             <ion-icon name="trash"></ion-icon>\n           </button>\n         </ion-item-options>\n      </ion-item-sliding>\n     \n    </ion-list>\n  \n    <ion-fab right bottom>\n      <button ion-fab (click)="goToArchivePage()">\n        <ion-icon name="archive"></ion-icon>\n      </button>\n    </ion-fab>\n  \n  </ion-content>\n  '/*ion-inline-end:"/Users/pawan/Documents/GitHub/todo-app/src/pages/home/home.html"*/
+        selector: 'page-home',template:/*ion-inline-start:"/Users/pawan/Documents/GitHub/todo-app/src/pages/home/home.html"*/'<ion-header>\n    <ion-navbar>\n      <ion-title>\n        Todo\n      </ion-title>\n      <ion-buttons end> \n        <button (click)="toggleReorder()" ion-button *ngIf="!reorderIsEnabled">\n          Edit\n        </button>\n        <button (click)="toggleReorder()" ion-button *ngIf="reorderIsEnabled">\n          Done\n        </button>\n  \n        <button ion-button (click)="openTodoAlert()">\n          <ion-icon name="add"></ion-icon>\n        </button>\n      </ion-buttons>\n    </ion-navbar>\n  </ion-header>\n  \n  <ion-content padding>\n    \n    <ion-list [reorder]="reorderIsEnabled" (ionItemReorder)="itemReordered($event)">\n      <ion-item-sliding *ngFor="let todo of todos; let todoIndex = index">\n         <ion-item>{{todo}}</ion-item>\n         <ion-item-options side="left">\n          <button ion-button (click)="editTodo(todoIndex)">\n            <ion-icon name="create"></ion-icon>\n          </button>\n        </ion-item-options>\n        \n         <ion-item-options side="right">\n           <button color="danger" ion-button (click)="archiveTodo(todoIndex)">\n             <ion-icon name="trash"></ion-icon>\n           </button>\n         </ion-item-options>\n      </ion-item-sliding>\n     \n    </ion-list>\n  \n    <ion-fab right bottom>\n      <button ion-fab (click)="goToArchivePage()">\n        <ion-icon name="archive"></ion-icon>\n      </button>\n    </ion-fab>\n  \n  </ion-content>\n  '/*ion-inline-end:"/Users/pawan/Documents/GitHub/todo-app/src/pages/home/home.html"*/
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__providers_todo_todo_provider__["a" /* TodoProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__providers_todo_todo_provider__["a" /* TodoProvider */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* AlertController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* AlertController */]) === "function" && _c || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* ToastController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* ToastController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__providers_todo_todo_provider__["a" /* TodoProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__providers_todo_todo_provider__["a" /* TodoProvider */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* AlertController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* AlertController */]) === "function" && _d || Object])
 ], HomePage);
 
-var _a, _b, _c;
+var _a, _b, _c, _d;
 //# sourceMappingURL=home.js.map
 
 /***/ }),
@@ -56571,6 +56614,9 @@ var TodoProvider = (function () {
     };
     TodoProvider.prototype.addTodo = function (todo) {
         this.todos.push(todo);
+    };
+    TodoProvider.prototype.editTodo = function (todo, todoIndex) {
+        this.todos[todoIndex] = todo;
     };
     return TodoProvider;
 }());
@@ -75061,7 +75107,7 @@ var MyApp = (function () {
 MyApp = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_6" /* Component */])({template:/*ion-inline-start:"/Users/pawan/Documents/GitHub/todo-app/src/app/app.html"*/'<ion-nav [root]="rootPage"></ion-nav>\n'/*ion-inline-end:"/Users/pawan/Documents/GitHub/todo-app/src/app/app.html"*/
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* Platform */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */], __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */]])
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* Platform */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */], __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */]])
 ], MyApp);
 
 //# sourceMappingURL=app.component.js.map
