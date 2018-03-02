@@ -55605,7 +55605,7 @@ function SlideEdgeGesture_tsickle_Closure_declarations() {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_alert_alert__ = __webpack_require__(52);
 /* unused harmony reexport Alert */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_alert_alert_controller__ = __webpack_require__(106);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_6__components_alert_alert_controller__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return __WEBPACK_IMPORTED_MODULE_6__components_alert_alert_controller__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_alert_alert_component__ = __webpack_require__(51);
 /* unused harmony reexport AlertCmp */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_app_app__ = __webpack_require__(6);
@@ -55814,7 +55814,7 @@ function SlideEdgeGesture_tsickle_Closure_declarations() {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_108__platform_dom_controller__ = __webpack_require__(8);
 /* unused harmony reexport DomController */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_109__platform_platform__ = __webpack_require__(3);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return __WEBPACK_IMPORTED_MODULE_109__platform_platform__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return __WEBPACK_IMPORTED_MODULE_109__platform_platform__["a"]; });
 /* unused harmony reexport setupPlatform */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_110__tap_click_haptic__ = __webpack_require__(35);
 /* unused harmony reexport Haptic */
@@ -55823,7 +55823,7 @@ function SlideEdgeGesture_tsickle_Closure_declarations() {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_112__navigation_ionic_page__ = __webpack_require__(228);
 /* unused harmony reexport IonicPage */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_113__navigation_nav_controller__ = __webpack_require__(21);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_113__navigation_nav_controller__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_113__navigation_nav_controller__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_114__navigation_nav_controller_base__ = __webpack_require__(45);
 /* unused harmony reexport NavControllerBase */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_115__navigation_nav_params__ = __webpack_require__(14);
@@ -55871,7 +55871,7 @@ function SlideEdgeGesture_tsickle_Closure_declarations() {
 /* unused harmony reexport IonicFormInput */
 /* unused harmony reexport IonicTapInput */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_129__util_util__ = __webpack_require__(2);
-/* unused harmony reexport reorderArray */
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_129__util_util__["r"]; });
 /* unused harmony reexport normalizeURL */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_130__animations_animation__ = __webpack_require__(11);
 /* unused harmony reexport Animation */
@@ -56385,8 +56385,15 @@ var HomePage = (function () {
         this.navCtrl = navCtrl;
         this.alertController = alertController;
         this.todos = [];
+        this.reorderIsEnabled = false;
         this.todos = this.todoProvider.getTodos();
     }
+    HomePage.prototype.toggleReorder = function () {
+        this.reorderIsEnabled = !this.reorderIsEnabled;
+    };
+    HomePage.prototype.itemReordered = function ($event) {
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* reorderArray */])(this.todos, $event);
+    };
     HomePage.prototype.openTodoAlert = function () {
         var _this = this;
         var addTodoAlert = this.alertController.create({
@@ -56418,11 +56425,12 @@ var HomePage = (function () {
 }());
 HomePage = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_6" /* Component */])({
-        selector: 'page-home',template:/*ion-inline-start:"/Users/pawan/Documents/GitHub/todo-app/src/pages/home/home.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>\n      Todo\n    </ion-title>\n    <ion-buttons end> \n      <button ion-button (click)="openTodoAlert()">\n        <ion-icon name="add"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n  \n  <ion-list>\n    <ion-item-sliding *ngFor="let todo of todos">\n       <ion-item>{{todo}}</ion-item>\n\n       <ion-item-options side="right">\n         <button color="danger" ion-button>\n           <ion-icon name="trash"></ion-icon>\n         </button>\n       </ion-item-options>\n    </ion-item-sliding>\n   \n  </ion-list>\n\n</ion-content>\n'/*ion-inline-end:"/Users/pawan/Documents/GitHub/todo-app/src/pages/home/home.html"*/
+        selector: 'page-home',template:/*ion-inline-start:"/Users/pawan/Documents/GitHub/todo-app/src/pages/home/home.html"*/'<ion-header>\n    <ion-navbar>\n      <ion-title>\n        Todo\n      </ion-title>\n      <ion-buttons end> \n        <button (click)="toggleReorder()" ion-button *ngIf="!reorderIsEnabled">\n          Edit\n        </button>\n        <button (click)="toggleReorder()" ion-button *ngIf="reorderIsEnabled">\n          Done\n        </button>\n  \n        <button ion-button (click)="openTodoAlert()">\n          <ion-icon name="add"></ion-icon>\n        </button>\n      </ion-buttons>\n    </ion-navbar>\n  </ion-header>\n  \n  <ion-content padding>\n    \n    <ion-list [reorder]="reorderIsEnabled" (ionItemReorder)="itemReordered($event)">\n      <ion-item-sliding *ngFor="let todo of todos">\n         <ion-item>{{todo}}</ion-item>\n  \n         <ion-item-options side="right">\n           <button color="danger" ion-button>\n             <ion-icon name="trash"></ion-icon>\n           </button>\n         </ion-item-options>\n      </ion-item-sliding>\n     \n    </ion-list>\n  \n  </ion-content>\n  '/*ion-inline-end:"/Users/pawan/Documents/GitHub/todo-app/src/pages/home/home.html"*/
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__providers_todo_todo_provider__["a" /* TodoProvider */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* AlertController */]])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__providers_todo_todo_provider__["a" /* TodoProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__providers_todo_todo_provider__["a" /* TodoProvider */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* NavController */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* AlertController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* AlertController */]) === "function" && _c || Object])
 ], HomePage);
 
+var _a, _b, _c;
 //# sourceMappingURL=home.js.map
 
 /***/ }),
@@ -74937,7 +74945,7 @@ var MyApp = (function () {
 MyApp = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_6" /* Component */])({template:/*ion-inline-start:"/Users/pawan/Documents/GitHub/todo-app/src/app/app.html"*/'<ion-nav [root]="rootPage"></ion-nav>\n'/*ion-inline-end:"/Users/pawan/Documents/GitHub/todo-app/src/app/app.html"*/
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* Platform */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */], __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */]])
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* Platform */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */], __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */]])
 ], MyApp);
 
 //# sourceMappingURL=app.component.js.map

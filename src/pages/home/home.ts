@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { NavController, AlertController } from 'ionic-angular';
+import { NavController, AlertController,reorderArray } from 'ionic-angular';
 
 import { TodoProvider } from "../../providers/todo/todo-provider";
 
@@ -10,9 +10,17 @@ import { TodoProvider } from "../../providers/todo/todo-provider";
 })
 export class HomePage {
   public todos = [];
-
+  public reorderIsEnabled = false;
   constructor(private todoProvider: TodoProvider, public navCtrl: NavController, private alertController: AlertController) {
     this.todos = this.todoProvider.getTodos();
+  }
+
+  toggleReorder(){
+    this.reorderIsEnabled = !this.reorderIsEnabled;
+  }
+
+  itemReordered($event){
+    reorderArray(this.todos, $event);
   }
 
   openTodoAlert(){
