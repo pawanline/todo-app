@@ -21,6 +21,7 @@ export class HomePage {
   }
 
   goToArchivePage(){
+  
     this.navCtrl.push(TodoArchivePage);
   }
   toggleReorder(){
